@@ -6,7 +6,7 @@ const ToggleSideBar = () => {
   const handleClick = () => {
     togglerRef.current.classList.toggle('menu-clicked');
     setIsXNav(!isXNav);
-    // document.getElementById('side').classList.toggle('show-side');
+    document.getElementById('side').classList.toggle('show-side');
   }
   return (
     <div className="menu-icon-container">

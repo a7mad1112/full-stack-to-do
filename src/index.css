@@ -33,3 +33,17 @@ a {
 section h2 {
   font-weight: bolder;
 }
+
+
+.scale-action {
+  font-size: 1.5rem;
+  transition-duration: 0.4s;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  cursor: pointer;
+}
+
+.scale-action:hover {
+  transform: scale(1.3);
+}
+
