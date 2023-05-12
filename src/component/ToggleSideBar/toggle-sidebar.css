@@ -1,0 +1,75 @@
+
+.menu-icon-container {
+  overflow-x: hidden;
+  padding: 0;
+  width: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-icon {
+  width: 25px;
+  height: 25px;
+  position: relative;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.menu-icon span {
+  display: inline-block;
+  width: 100%;
+  height: 5px;
+  background-color: var(--black-color);
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+}
+
+.first-part {
+  top: 0;
+}
+
+.fade-left {
+  left: 0;
+}
+
+.fade-right {
+  right: 0;
+}
+
+.sec-part {
+  top: 10px;
+}
+
+.third-part {
+  top: 20px;
+}
+
+.menu-clicked .fade-right {
+  transform: translateX(26px);
+}
+
+.menu-clicked .fade-left {
+  transform: translateX(-26px);
+}
+
+.menu-clicked .toggler-1.x-nav {
+  transform: rotate(45deg);
+}
+
+.menu-clicked .toggler-2.x-nav {
+  transform: rotate(-45deg);
+}
+
+@media (max-width: 850px) {
+  .menu-icon-container {
+    display: flex;
+  }
+}
+
+@media (min-width: 850px) {
+  .menu-icon-container {
+    display: none;
+  }
+}

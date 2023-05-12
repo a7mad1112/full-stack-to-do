@@ -1,0 +1,35 @@
+/* Start Variable */
+:root {
+  --black-color: #171c21;
+  --low-priority: #0072f5;
+  --medium-priority: #ffae00;
+  --high-priority: #ff2424;
+  --sec-color: #eef2f6;
+}
+
+/* End Variable */
+/* Start Global Style */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  margin: 0 !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+section h2 {
+  font-weight: bolder;
+}
