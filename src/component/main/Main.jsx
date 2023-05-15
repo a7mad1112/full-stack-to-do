@@ -1,10 +1,13 @@
+import { useState } from "react";
 import Task from "../Task/Task";
+import AddTaskForm from "../add-task-modal/AddTaskModal";
 import RelaxImg from "../relax-img/RelaxImg";
 import './main.css'
 const Main = ({ currPage }) => {
   const { title, tasks } = currPage;
-  const completeTasks = tasks.filter((t) => !t.isComplete);
-  const unCompleteTasks = tasks.filter((t) => t.isComplete);
+  const completeTasks = tasks.filter((t) => !t.isCompleted);
+  const unCompleteTasks = tasks.filter((t) => t.isCompleted);
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false)
   return (
     <section id="main-content" className="p-5 w-100">
       <header className="mb-3 d-flex align-items-center justify-content-between">
@@ -18,7 +21,7 @@ const Main = ({ currPage }) => {
         {/* Add tasks Button */}
         {title === "Home" && (
           <div className="add-task w-100 rounded">
-            <button className="w-100 rounded">
+            <button className="w-100 rounded" onClick={() => setShowAddTaskModal(true)}>
               <i className="fa-solid fa-plus add-project"></i>
               <span>Add new task</span>
             </button>
@@ -26,21 +29,22 @@ const Main = ({ currPage }) => {
         )}
         {/* Accordion */}
         <div className="my-accordion">
-          {unCompleteTasks.length === 0 ? (
+          {completeTasks.length === 0 ? (
             <RelaxImg />
           ) : (
-            unCompleteTasks
+            completeTasks
               .map((t) => <Task key={t.id} task={t} />)
           )}
         </div>
       </div>
       <h2 className="fs-6 mt-4">Complete Tasks</h2>
       <div className="my-accordion complete-tasks">
-        {completeTasks
+        {unCompleteTasks
           .map((t) => (
             <Task key={t.id} task={t} />
           ))}
       </div>
+      <AddTaskForm isShow={showAddTaskModal} setIsShow={setShowAddTaskModal}/>
     </section>
   );
 };
