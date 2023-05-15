@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import Main from "../../component/main/Main";
+import { tasksContext } from "../../context/tasksContext";
 
 const Today = () => {
   // function that filter the tasks and return the tasks with current day
@@ -11,12 +13,14 @@ const Today = () => {
     return currentTasks;
   }
 
-  const tasks = getTasksForCurrentDay([]);
+  const { tasks } = useContext(tasksContext);
+
+  const tasksToday = getTasksForCurrentDay(tasks);
   return (
     <Main
       currPage={{
         title: "Today",
-        tasks,
+        tasks: tasksToday
       }}
     />
   );
