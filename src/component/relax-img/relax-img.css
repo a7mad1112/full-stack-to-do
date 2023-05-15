@@ -1,0 +1,13 @@
+.relax-img {
+  width: 100%;
+  text-align: center;
+}
+
+.relax-img img {
+  width: 100%;
+  max-width: 600px;
+}
+
+.relax-img p {
+  margin-top: 30px !important;
+}

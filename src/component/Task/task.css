@@ -1,0 +1,118 @@
+
+.task {
+  display: flex;
+  background-color: var(--sec-color);
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.task::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.task.high-priority::before {
+  background-color: var(--high-priority);
+}
+
+.task.medium-priority::before {
+  background-color: var(--medium-priority);
+}
+
+.task.low-priority::before {
+  background-color: var(--low-priority);
+}
+
+.content-box {
+  position: relative;
+  margin: 10px 0 !important;
+}
+
+.content-box .label {
+  position: relative;
+  color: var(--black-color);
+  cursor: pointer;
+}
+
+.content-box .label label::before {
+  content: '+';
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -23px;
+  font-size: 1.3rem;
+}
+
+.content-box.active .label label::before {
+  content: '-';
+}
+
+.content-box .label input {
+  background-color: transparent;
+  all: unset;
+  border: 1px solid transparent;
+  transition: 0.3s;
+  padding: 3px 6px;
+  border-radius: 5px;
+  max-width: 160px;
+}
+
+@media (max-width: 567px) {
+  .content-box .label input {
+    width: 100px;
+  }
+}
+
+.content-box .label input:focus {
+  background-color: #fff;
+}
+
+.content-box .label input:focus,
+.content-box .label input:hover {
+  border: 1px solid var(--black-color);
+}
+
+.content-box .content {
+  position: relative;
+  background-color: var(--sec-color);
+  height: 0;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.content-box.active .content {
+  height: fit-content;
+  padding: 10px;
+  border-top: 1px solid var(--black-color);
+}
+
+.content-box .content p {
+  font-size: 14px;
+}
+
+.content-box .content .time-limit {
+  color: var(--high-priority);
+}
+
+.content-box .task-actions {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.content-box .task-actions svg {
+  font-size: 16px;
+  color: #5a636d;
+  cursor: pointer;
+}
+
+.complete-tasks .task-header {
+  text-decoration: line-through;
+}

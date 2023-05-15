@@ -1,0 +1,49 @@
+#main-content>header label {
+  font-weight: bold;
+  font-style: italic;
+}
+
+#main-content>header label input {
+  padding: 2px 5px;
+  border: 2px solid var(--black-color);
+  background-color: transparent;
+  outline: none;
+  border-radius: 5px;
+}
+
+@media (max-width: 567px) {
+  #main-content>header label {
+    font-size: 12px;
+  }
+
+  #main-content>header label input {
+    width: 100px;
+  }
+}
+
+
+.add-task {
+  margin-bottom: 30px !important;
+}
+
+.add-task button {
+  border: none;
+  outline: none;
+  background-color: var(--black-color);
+  color: #fff;
+  font-size: 15px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 10px;
+  font-weight: bold;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+
+.add-task button:hover {
+  background-color: #171c21cc;
+}
+

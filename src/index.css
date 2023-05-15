@@ -47,3 +47,103 @@ section h2 {
   transform: scale(1.3);
 }
 
+/* start dark mode */
+.display-dark .header {
+  background-color: #000;
+}
+
+.display-dark {
+  background-color: var(--black-color);
+}
+
+.display-dark aside {
+  background-color: #000;
+}
+
+.display-dark aside h1,
+.display-dark aside ul li a,
+.display-dark h2 {
+  color: #fff;
+}
+
+.display-dark aside ul li a.active {
+  background-color: #41464b;
+  color: #fff;
+}
+
+.display-dark aside ul li a:hover:not(a.active) {
+  background-color: #0072f588;
+}
+
+.display-dark #display-mode .ball {
+  background-color: var(--low-priority) !important;
+}
+
+.display-dark {
+  color: #fff;
+}
+
+.display-dark .add-task button {
+  background-color: #41464b;
+}
+
+.display-dark .add-task button:hover {
+  background-color: #0072f588;
+}
+
+
+.display-dark .my-accordion .task {
+  background-color: #9fb3c8;
+}
+
+.display-dark .my-accordion .task input::placeholder {
+  color: #fff;
+}
+
+.display-dark .my-accordion .content-box .content {
+  background-color: #9fb3c8;
+  color: var(--black-color);
+}
+
+.display-dark .my-modal-content {
+  background-color: var(--black-color);
+}
+
+.display-dark .my-modal-content input,
+.display-dark .my-modal-content textarea,
+.display-dark .my-modal-content select {
+  color: var(--black-color);
+}
+
+.display-dark .my-modal-content .form-group button[type="submit"] {
+  background-color: var(--low-priority);
+}
+
+.display-dark .my-modal-content header {
+  color: #fff;
+}
+
+.display-dark #end-date.time-limit {
+  color: #9f353f !important;
+}
+
+
+body.display-dark #display-mode .ball {
+  left: 50px;
+  background-color: var(--medium-priority);
+}
+
+.display-dark #main-content>header label #search {
+  border: 2px solid var(--sec-color);
+  color: #fff;
+}
+
+.display-dark #side header h1 {
+  color: #fff;
+}
+
+.display-dark .table,
+.display-dark .table td {
+  color: white !important;
+}
+/* end dark mode */

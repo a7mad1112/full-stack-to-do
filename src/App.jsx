@@ -1,18 +1,10 @@
-import Header from "./component/Header/Header"
-import Routers from "./routers/Routers"
-import Footer from './component/Footer/Footer';
-import SideBar from "./component/SideBar/SideBar";
+import Layout from "./component/layout/Layout"
 
 function App() {
 
   return (
     <>
-      <Header/>
-      <main className="d-flex">
-        <SideBar/>
-      </main>
-      <Routers/>
-      <Footer/>
+      <Layout/>
     </>
   )
 }
