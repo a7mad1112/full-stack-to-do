@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Main from "../../component/main/Main";
 import { tasksContext } from "../../context/tasksContext";
 
@@ -15,12 +15,17 @@ const Today = () => {
 
   const { tasks } = useContext(tasksContext);
 
-  const tasksToday = getTasksForCurrentDay(tasks);
+  const [tasksToday, setTasksToday] = useState([]);
+
+  useEffect(() => {
+    setTasksToday(getTasksForCurrentDay(tasks));
+  }, [tasks]);
+
   return (
     <Main
       currPage={{
         title: "Today",
-        tasks: tasksToday
+        tasks: tasksToday,
       }}
     />
   );

@@ -10,7 +10,7 @@ const EditTaskModal = ({ isShow, setIsShow }) => {
     date: "",
     priority: "none",
   };
-  const { currTask } = useContext(tasksContext);
+  const { currTask, setTasks } = useContext(tasksContext);
   useEffect(() => {
     setInputsValue({
       title: currTask.title,
@@ -49,23 +49,29 @@ const EditTaskModal = ({ isShow, setIsShow }) => {
     return errors;
   };
 
-  const handleSubmit = (eve) => {
+  const handleSubmit = async (eve) => {
     eve.preventDefault();
-    // console.log(inputsValue);
-    fetch(PUT_URL + currTask.id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputsValue),
-    })
-    .then(res => {
-      if(res.ok)
+    if (Object.keys(validate(inputsValue)).length !== 0) return;
+    try {
+      const response = await fetch(PUT_URL + currTask.id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputsValue),
+      });
+      if (response.ok) {
         setIsShow(false);
-    })
-    .catch(err => {
+        const updatedTask = { ...currTask, ...inputsValue };
+        setTasks((prevTasks) =>
+          prevTasks.map((task) =>
+            task.id === currTask.id ? updatedTask : task
+          )
+        );
+      }
+    } catch (err) {
       console.error(err);
-    })
+    }
   };
 
   return (

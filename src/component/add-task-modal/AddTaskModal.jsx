@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./add-task-form.css";
+import { tasksContext } from "../../context/tasksContext";
 
 const AddTaskForm = ({ isShow, setIsShow }) => {
+  const { setTasks } = useContext(tasksContext);
   const POST_URL = "http://localhost:3000/api/v1/tasks/addtask";
   const modal = useRef();
   const form = useRef();
@@ -23,18 +25,20 @@ const AddTaskForm = ({ isShow, setIsShow }) => {
     setInputsErrors(validate({ ...inputsValue, [name]: value }));
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(Object.keys(validate(inputsValue)).length !== 0) return;
     async function addTask() {
       // console.log(inputsValue);
       const task = {
-        "title": inputsValue.title,
-        "assignee": inputsValue.assignee,
-        "details": inputsValue.details ?? "",
-        "date": inputsValue.date ? new Date(inputsValue.date) : null,
-        "priority": inputsValue.priority ?? "none",
-        "isCompleted": false
-      }
+        title: inputsValue.title,
+        assignee: inputsValue.assignee,
+        details: inputsValue.details ?? "",
+        date: inputsValue.date ? new Date(inputsValue.date) : null,
+        priority: inputsValue.priority ?? "none",
+        isCompleted: false,
+      };
       await fetch(POST_URL, {
         method: "POST",
         body: JSON.stringify(task),
@@ -42,7 +46,11 @@ const AddTaskForm = ({ isShow, setIsShow }) => {
           "Content-Type": "application/json",
         },
       })
-        .then((res) => res.json());
+        .then((res) => {
+          if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
+        })
+        .then(res => res.json())
+        .then((data) => setTasks(data.tasks));
     }
     addTask();
     setIsShow(false);

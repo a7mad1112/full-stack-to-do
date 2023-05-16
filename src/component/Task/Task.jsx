@@ -64,7 +64,7 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
             }}
           ></label>
           <input
-            placeholder={inlineInput}
+            placeholder={task.title}
             onKeyDown={({ key, target }) => {
               // Trigger onBlur event
               if (key === "Enter" || key === "Escape") target.blur();

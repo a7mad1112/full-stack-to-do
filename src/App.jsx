@@ -2,8 +2,8 @@ import Layout from "./component/layout/Layout";
 import { tasksContext } from "./context/tasksContext";
 import { useEffect, useState } from "react";
 function App() {
-  const [tasks, setTasks] = useState([]);
   const [currTask, setCurrTask] = useState({});
+  const [tasks, setTasks] = useState([]);
   const API_URL = "http://127.0.0.1:3000/api/v1/tasks";
   useEffect(() => {
     const fetchData = async () => {
@@ -15,15 +15,16 @@ function App() {
         } else {
           throw new Error("Error: Unable to fetch tasks");
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error(err);
       }
     };
     fetchData();
   }, []);
+
   return (
     <>
-      <tasksContext.Provider value={{ tasks, currTask, setCurrTask }}>
+      <tasksContext.Provider value={{ tasks, currTask, setCurrTask, setTasks }}>
         <Layout />
       </tasksContext.Provider>
     </>

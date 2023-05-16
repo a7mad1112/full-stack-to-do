@@ -4,7 +4,7 @@ import { tasksContext } from "../../context/tasksContext";
 const DeleteTaskModal = ({ isShow, setIsShow }) => {
   const DELETE_URL = "http://127.0.0.1:3000/api/v1/tasks/delete?id=";
 
-  const { currTask } = useContext(tasksContext);
+  const { currTask, setTasks } = useContext(tasksContext);
   useEffect(() => {}, [currTask]);
   const handleDelete = () => {
     fetch(DELETE_URL + currTask.id, {
@@ -12,13 +12,21 @@ const DeleteTaskModal = ({ isShow, setIsShow }) => {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error deleting task");
+        if (res.ok) {
+          return fetch("http://127.0.0.1:3000/api/v1/tasks");
+        }
+        throw new Error("Failed to delete task");
       })
+      .then((res) => res.json())
+      .then((data) => setTasks(data.tasks))
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setIsShow(false);
       });
-      setIsShow(false);
   };
+
   return (
     <div
       id="delete-task-modal"

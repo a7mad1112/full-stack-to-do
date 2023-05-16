@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Main from "../../component/main/Main";
 import { tasksContext } from "../../context/tasksContext";
 
@@ -17,8 +17,15 @@ const Week = () => {
     });
     return currentTasks;
   }
+
   const { tasks } = useContext(tasksContext);
-  const tasksWeek = getTasksForNextSevenDays(tasks);
+
+  const [tasksWeek, setTasksWeek] = useState([]);
+
+  useEffect(() => {
+    setTasksWeek(getTasksForNextSevenDays(tasks));
+  }, [tasks]);
+
   return (
     <Main
       currPage={{
