@@ -18,8 +18,11 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
   const { setCurrTask } = useContext(tasksContext);
   const UPDATE_COMPLETION_URL =
     "http://127.0.0.1:3000/api/v1/tasks/update/completion?id=";
+  const UPDATE_TITLE = "http://127.0.0.1:3000/api/v1/tasks/update/title?id=";
 
   const [checkboxValue, setCheckboxValue] = useState(task.isCompleted);
+  const [inlineInput, setInlineInput] = useState(task.title);
+
   const updateCompletion = ({ target }) => {
     // console.log(!checkboxValue);
     fetch(UPDATE_COMPLETION_URL + task.id, {
@@ -35,6 +38,18 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
       });
     setCheckboxValue(!checkboxValue);
   };
+
+  const handleInlineEdit = () => {
+    fetch(UPDATE_TITLE + task.id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: inlineInput }),
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+  };
   return (
     <div className="content-box" ref={taskRef}>
       <div
@@ -49,21 +64,20 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
             }}
           ></label>
           <input
-            placeholder={task.title}
+            placeholder={inlineInput}
             onKeyDown={({ key, target }) => {
               // Trigger onBlur event
               if (key === "Enter" || key === "Escape") target.blur();
             }}
             onBlur={(ev) => {
               ev.target.value = "";
+              handleInlineEdit();
             }}
             onFocus={(ev) => {
-              ev.target.value = task.title;
+              ev.target.value = inlineInput;
               ev.target.select();
             }}
-            onChange={(ev) => {
-              console.log("inline edit");
-            }}
+            onChange={(e) => setInlineInput(e.target.value)}
             aria-label="text"
             data-task-id={task.id}
           />
