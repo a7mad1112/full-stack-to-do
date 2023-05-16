@@ -4,6 +4,7 @@ import AddTaskForm from "../add-task-modal/AddTaskModal";
 import RelaxImg from "../relax-img/RelaxImg";
 import "./main.css";
 import DeleteTaskModal from "../delete-task-modal/DeleteTaskModal";
+import EditTaskModal from "../edit-task-modal/EditTaskModal";
 const Main = ({ currPage }) => {
   const { title, tasks } = currPage;
   const completeTasks = tasks.filter((t) => !t.isCompleted);
@@ -11,6 +12,7 @@ const Main = ({ currPage }) => {
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
   const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
 
   return (
     <section id="main-content" className="p-5 w-100">
@@ -44,6 +46,7 @@ const Main = ({ currPage }) => {
                 key={t.id}
                 task={t}
                 setShowDeleteTaskModal={setShowDeleteTaskModal}
+                setShowEditTaskModal={setShowEditTaskModal}
               />
             ))
           )}
@@ -56,10 +59,12 @@ const Main = ({ currPage }) => {
             key={t.id}
             task={t}
             setShowDeleteTaskModal={setShowDeleteTaskModal}
+            setShowEditTaskModal={setShowEditTaskModal}
           />
         ))}
       </div>
       <AddTaskForm isShow={showAddTaskModal} setIsShow={setShowAddTaskModal} />
+      <EditTaskModal isShow={showEditTaskModal} setIsShow={setShowEditTaskModal} />
       <DeleteTaskModal
         isShow={showDeleteTaskModal}
         setIsShow={setShowDeleteTaskModal}

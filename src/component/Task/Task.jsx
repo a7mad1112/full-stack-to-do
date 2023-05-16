@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
 import "./task.css";
 import { tasksContext } from "../../context/tasksContext";
-const Task = ({ task, setShowDeleteTaskModal }) => {
+const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
   // function to check if the date is passed
   const hasDatePassed = (dateString) => {
     // create a Date object for the given date string
@@ -50,7 +50,14 @@ const Task = ({ task, setShowDeleteTaskModal }) => {
           />
         </div>
         <div className="task-actions">
-          <span id="edit-task-btn" role="button">
+          <span
+            id="edit-task-btn"
+            role="button"
+            onClick={() => {
+              setShowEditTaskModal(true);
+              setCurrTask(task);
+            }}
+          >
             <i className="ri-pencil-fill"></i>
           </span>
           <span
