@@ -2,12 +2,16 @@ import { useState } from "react";
 import Task from "../Task/Task";
 import AddTaskForm from "../add-task-modal/AddTaskModal";
 import RelaxImg from "../relax-img/RelaxImg";
-import './main.css'
+import "./main.css";
+import DeleteTaskModal from "../delete-task-modal/DeleteTaskModal";
 const Main = ({ currPage }) => {
   const { title, tasks } = currPage;
   const completeTasks = tasks.filter((t) => !t.isCompleted);
   const unCompleteTasks = tasks.filter((t) => t.isCompleted);
-  const [showAddTaskModal, setShowAddTaskModal] = useState(false)
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+
+  const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
+
   return (
     <section id="main-content" className="p-5 w-100">
       <header className="mb-3 d-flex align-items-center justify-content-between">
@@ -21,7 +25,10 @@ const Main = ({ currPage }) => {
         {/* Add tasks Button */}
         {title === "Home" && (
           <div className="add-task w-100 rounded">
-            <button className="w-100 rounded" onClick={() => setShowAddTaskModal(true)}>
+            <button
+              className="w-100 rounded"
+              onClick={() => setShowAddTaskModal(true)}
+            >
               <i className="fa-solid fa-plus add-project"></i>
               <span>Add new task</span>
             </button>
@@ -32,19 +39,31 @@ const Main = ({ currPage }) => {
           {completeTasks.length === 0 ? (
             <RelaxImg />
           ) : (
-            completeTasks
-              .map((t) => <Task key={t.id} task={t} />)
+            completeTasks.map((t) => (
+              <Task
+                key={t.id}
+                task={t}
+                setShowDeleteTaskModal={setShowDeleteTaskModal}
+              />
+            ))
           )}
         </div>
       </div>
       <h2 className="fs-6 mt-4">Complete Tasks</h2>
       <div className="my-accordion complete-tasks">
-        {unCompleteTasks
-          .map((t) => (
-            <Task key={t.id} task={t} />
-          ))}
+        {unCompleteTasks.map((t) => (
+          <Task
+            key={t.id}
+            task={t}
+            setShowDeleteTaskModal={setShowDeleteTaskModal}
+          />
+        ))}
       </div>
-      <AddTaskForm isShow={showAddTaskModal} setIsShow={setShowAddTaskModal}/>
+      <AddTaskForm isShow={showAddTaskModal} setIsShow={setShowAddTaskModal} />
+      <DeleteTaskModal
+        isShow={showDeleteTaskModal}
+        setIsShow={setShowDeleteTaskModal}
+      />
     </section>
   );
 };

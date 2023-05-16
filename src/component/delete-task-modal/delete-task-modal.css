@@ -1,0 +1,12 @@
+#delete-task-modal header {
+  border-bottom: 3px solid var(--medium-priority);
+}
+
+#delete-task-modal button {
+  width: fit-content;
+  padding: 6px 14px;
+}
+
+#delete-task-modal #delete-task {
+  background-color: var(--high-priority);
+}

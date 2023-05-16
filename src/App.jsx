@@ -3,7 +3,8 @@ import { tasksContext } from "./context/tasksContext";
 import { useEffect, useState } from "react";
 function App() {
   const [tasks, setTasks] = useState([]);
-  const API_URL = "http://127.0.0.1:3000/api/v1/tasks"
+  const [currTask, setCurrTask] = useState({});
+  const API_URL = "http://127.0.0.1:3000/api/v1/tasks";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +23,7 @@ function App() {
   }, []);
   return (
     <>
-      <tasksContext.Provider value={{ tasks }}>
+      <tasksContext.Provider value={{ tasks, currTask, setCurrTask }}>
         <Layout />
       </tasksContext.Provider>
     </>

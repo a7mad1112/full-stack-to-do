@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import "./task.css";
-const Task = ({ task }) => {
+import { tasksContext } from "../../context/tasksContext";
+const Task = ({ task, setShowDeleteTaskModal }) => {
   // function to check if the date is passed
   const hasDatePassed = (dateString) => {
     // create a Date object for the given date string
@@ -13,6 +14,8 @@ const Task = ({ task }) => {
     return date < today;
   };
   const taskRef = useRef(false);
+
+  const { setCurrTask } = useContext(tasksContext);
   return (
     <div className="content-box" ref={taskRef}>
       <div
@@ -50,7 +53,15 @@ const Task = ({ task }) => {
           <span id="edit-task-btn" role="button">
             <i className="ri-pencil-fill"></i>
           </span>
-          <span id="delete-task-btn" role="button" aria-label="Delete task">
+          <span
+            id="delete-task-btn"
+            role="button"
+            aria-label="Delete task"
+            onClick={() => {
+              setShowDeleteTaskModal(true);
+              setCurrTask(task);
+            }}
+          >
             <i className="ri-delete-bin-7-fill"></i>
           </span>
         </div>
