@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import "./task.css";
 import { tasksContext } from "../../context/tasksContext";
 const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
@@ -16,6 +16,25 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
   const taskRef = useRef(false);
 
   const { setCurrTask } = useContext(tasksContext);
+  const UPDATE_COMPLETION_URL =
+    "http://127.0.0.1:3000/api/v1/tasks/update/completion?id=";
+
+  const [checkboxValue, setCheckboxValue] = useState(task.isCompleted);
+  const updateCompletion = ({ target }) => {
+    // console.log(!checkboxValue);
+    fetch(UPDATE_COMPLETION_URL + task.id, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isCompleted: !checkboxValue }),
+    })
+      .then((res) => {
+        if (res.ok) console.log("fetch data");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setCheckboxValue(!checkboxValue);
+  };
   return (
     <div className="content-box" ref={taskRef}>
       <div
@@ -89,7 +108,8 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
             type="checkbox"
             id={`task-isComplete-${task.id}`}
             name="isComplete"
-            checked={task.isComplete}
+            checked={checkboxValue}
+            onChange={updateCompletion}
           />
         </p>
       </div>
