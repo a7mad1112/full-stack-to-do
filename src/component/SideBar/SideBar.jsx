@@ -1,11 +1,14 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./side-bar.css";
+import { tasksContext } from "../../context/tasksContext";
 const SideBar = () => {
   useEffect(() => {
     const value = localStorage.getItem("displayMode") || "";
     if (value === "dark") document.body.classList.add("display-dark");
   }, []);
+
+  const { tasks } = useContext(tasksContext);
 
   const toggleDisplayMode = () => {
     let value = localStorage.getItem("displayMode");
@@ -28,7 +31,7 @@ const SideBar = () => {
         <nav>
           <ul className="p-0">
             <li>
-              <NavLink to={"/"} activeclassname="active">
+              <NavLink to={"/"} activeclassname="active" data-tasks-count={tasks.length}>
                 <i className="ri-home-office-fill"></i>
                 <span>home</span>
               </NavLink>

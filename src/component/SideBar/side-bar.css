@@ -72,8 +72,8 @@ aside ul li a:hover:not(a.active) {
   color: #fff;
 }
 
-/* 
-aside>ul li a::after {
+
+aside ul li a::after {
   content: attr(data-tasks-count);
   position: absolute;
   right: 5px;
@@ -82,8 +82,8 @@ aside>ul li a::after {
   padding: 4px 7px;
   border-radius: 50%;
   line-height: 14px;
-  font-size: 14px;
-} */
+  font-size: 17px;
+}
 
 aside>ul li a.active::after {
   color: var(--black-color);
