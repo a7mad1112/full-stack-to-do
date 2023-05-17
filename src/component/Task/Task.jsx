@@ -15,7 +15,7 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
   };
   const taskRef = useRef(false);
 
-  const { setCurrTask } = useContext(tasksContext);
+  const { setCurrTask, setTasks } = useContext(tasksContext);
   const UPDATE_COMPLETION_URL =
     "http://127.0.0.1:3000/api/v1/tasks/update/completion?id=";
   const UPDATE_TITLE = "http://127.0.0.1:3000/api/v1/tasks/update/title?id=";
@@ -31,8 +31,10 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
       body: JSON.stringify({ isCompleted: !checkboxValue }),
     })
       .then((res) => {
-        if (res.ok) console.log("fetch data");
+        if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
       })
+      .then((res) => res.json())
+      .then((data) => setTasks(data.tasks))
       .catch((err) => {
         console.error(err);
       });
@@ -46,9 +48,15 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ title: inlineInput }),
-    }).catch((error) => {
-      console.error("Error:", error);
-    });
+    })
+      .then((res) => {
+        if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
+      })
+      .then((res) => res.json())
+      .then((data) => setTasks(data.tasks))
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   return (
     <div className="content-box" ref={taskRef}>
