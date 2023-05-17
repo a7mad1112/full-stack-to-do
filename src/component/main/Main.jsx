@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { tasksContext } from "../../context/tasksContext";
 import Task from "../Task/Task";
 import AddTaskForm from "../add-task-modal/AddTaskModal";
 import RelaxImg from "../relax-img/RelaxImg";
@@ -7,20 +8,29 @@ import DeleteTaskModal from "../delete-task-modal/DeleteTaskModal";
 import EditTaskModal from "../edit-task-modal/EditTaskModal";
 const Main = ({ currPage }) => {
   const { title, tasks } = currPage;
-  const completeTasks = tasks.filter((t) => !t.isCompleted);
-  const unCompleteTasks = tasks.filter((t) => t.isCompleted);
+  const [currTasks, setCurrTasks] = useState(tasks)
+
+  useEffect(() => {
+    setCurrTasks(tasks);
+  }, [tasks])
+
+  const completeTasks = currTasks.filter((t) => !t.isCompleted);
+  const unCompleteTasks = currTasks.filter((t) => t.isCompleted);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
   const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
   const [showEditTaskModal, setShowEditTaskModal] = useState(false);
-
+  const handleSearch = ({ target }) => {
+    const value = target.value?.trim();
+    setCurrTasks(() => tasks.filter(t => t.title.toLowerCase().includes(value.toLowerCase())));
+  }
   return (
     <section id="main-content" className="p-5 w-100">
       <header className="mb-3 d-flex align-items-center justify-content-between">
         <h2 className="fs-3">{title}</h2>
         <label htmlFor="search">
           <span>Search: </span>
-          <input type="search" id="search" />
+          <input type="search" id="search" onChange={handleSearch} />
         </label>
       </header>
       <div className="tasks-container w-100">
