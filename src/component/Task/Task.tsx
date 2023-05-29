@@ -1,47 +1,62 @@
 import { useContext, useRef, useState } from "react";
 import "./task.css";
-import { tasksContext } from "../../context/tasksContext";
-const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
+import { tasksContext } from "../../context/tasksContext.ts";
+import { MyResponse, Task } from "../../types/types.ts";
+
+type props = {
+  task: Task;
+  setShowDeleteTaskModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditTaskModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const Task: React.FC<props> = ({
+  task,
+  setShowDeleteTaskModal,
+  setShowEditTaskModal,
+}) => {
   // function to check if the date is passed
-  const hasDatePassed = (dateString) => {
+  const hasDatePassed = (dateString: string): boolean => {
     // create a Date object for the given date string
-    const date = new Date(dateString);
+    const date: Date = new Date(dateString);
 
     // create a Date object for the current date
-    const today = new Date();
+    const today: Date = new Date();
 
     // compare the two dates and return true if the given date has passed
     return date < today;
   };
-  const taskRef = useRef(false);
+  const taskRef = useRef<HTMLDivElement>(null);
 
   const { setCurrTask, setTasks } = useContext(tasksContext);
-  const UPDATE_COMPLETION_URL =
+  const UPDATE_COMPLETION_URL: string =
     "http://127.0.0.1:3000/api/v1/tasks/update/completion?id=";
-  const UPDATE_TITLE = "http://127.0.0.1:3000/api/v1/tasks/update/title?id=";
+  const UPDATE_TITLE: string =
+    "http://127.0.0.1:3000/api/v1/tasks/update/title?id=";
 
-  const [checkboxValue, setCheckboxValue] = useState(task.isCompleted);
-  const [inlineInput, setInlineInput] = useState(task.title);
+  const [checkboxValue, setCheckboxValue] = useState<boolean>(task.isCompleted);
+  const [inlineInput, setInlineInput] = useState<string>(task.title);
 
-  const updateCompletion = ({ target }) => {
+  const updateCompletion = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>): void => {
     // console.log(!checkboxValue);
     fetch(UPDATE_COMPLETION_URL + task.id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isCompleted: !checkboxValue }),
     })
-      .then((res) => {
+      .then((res: Response) => {
         if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
+        return Promise.reject("Cannot Update, something went wrong...");
       })
-      .then((res) => res.json())
-      .then((data) => setTasks(data.tasks))
-      .catch((err) => {
+      .then((res: Response) => res.json())
+      .then((data: MyResponse) => setTasks(data.tasks))
+      .catch((err: Error) => {
         console.error(err);
       });
     setCheckboxValue(!checkboxValue);
   };
 
-  const handleInlineEdit = () => {
+  const handleInlineEdit = (): void => {
     fetch(UPDATE_TITLE + task.id, {
       method: "PATCH",
       headers: {
@@ -49,12 +64,13 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
       },
       body: JSON.stringify({ title: inlineInput }),
     })
-      .then((res) => {
+      .then((res: Response) => {
         if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
+        return Promise.reject("Cannot Update, something went wrong...");
       })
-      .then((res) => res.json())
-      .then((data) => setTasks(data.tasks))
-      .catch((error) => {
+      .then((res: Response) => res.json())
+      .then((data: MyResponse) => setTasks(data.tasks))
+      .catch((error: Error) => {
         console.error("Error:", error);
       });
   };
@@ -68,12 +84,12 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
           <label
             htmlFor={`task-title-${task.id}`}
             onClick={() => {
-              taskRef.current.classList.toggle("active");
+              taskRef.current?.classList.toggle("active");
             }}
           ></label>
           <input
             placeholder={task.title}
-            onKeyDown={({ key, target }) => {
+            onKeyDown={({ key, target }: React.KeyboardEvent<HTMLInputElement>) => {
               // Trigger onBlur event
               if (key === "Enter" || key === "Escape") target.blur();
             }}
@@ -119,9 +135,9 @@ const Task = ({ task, setShowDeleteTaskModal, setShowEditTaskModal }) => {
         <p>Details: {task.details}</p>
         <p id="end-date" className="mt-1">
           <label htmlFor={`task-date${task.id}`}>Date: </label>
-          <span className={`${hasDatePassed(task.date) && "time-limit"}`}>
+          <span className={`${hasDatePassed(String(task.date)) && "time-limit"}`}>
             &nbsp;
-            {task.date}
+            {String(task.date)}
           </span>
         </p>
         <p className="is-done text-end">

@@ -1,17 +1,17 @@
 import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./side-bar.css";
-import { tasksContext } from "../../context/tasksContext";
-const SideBar = () => {
+import { tasksContext } from "../../context/tasksContext.ts";
+const SideBar: React.FC = () => {
   useEffect(() => {
-    const value = localStorage.getItem("displayMode") || "";
+    const value: string = localStorage.getItem("displayMode") || "";
     if (value === "dark") document.body.classList.add("display-dark");
   }, []);
 
   const { tasks } = useContext(tasksContext);
 
-  const toggleDisplayMode = () => {
-    let value = localStorage.getItem("displayMode");
+  const toggleDisplayMode = (): void => {
+    let value: string = localStorage.getItem("displayMode") ?? 'light';
     value = value === "light" ? "dark" : "light";
     localStorage.setItem("displayMode", value);
     value === "dark"
@@ -31,7 +31,7 @@ const SideBar = () => {
         <nav>
           <ul className="p-0">
             <li>
-              <NavLink to={"/"} activeclassname="active" data-tasks-count={tasks.length}>
+              <NavLink to={"/"} activeclassname="active" data-tasks-count={tasks?.length}>
                 <i className="ri-home-office-fill"></i>
                 <span>home</span>
               </NavLink>

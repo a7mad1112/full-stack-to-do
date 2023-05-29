@@ -1,6 +1,6 @@
-import ToggleSideBar from "../ToggleSideBar/ToggleSideBar"
+import ToggleSideBar from "../ToggleSideBar/ToggleSideBar.tsx"
 import './header.css';
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="d-flex justify-content-end align-items-center">

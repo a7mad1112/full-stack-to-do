@@ -1,59 +1,61 @@
-import { useContext, useEffect, useState } from "react";
-import { tasksContext } from "../../context/tasksContext";
+import React, { useContext, useEffect, useState } from "react";
+import { tasksContext } from "../../context/tasksContext.ts";
+import { InputsErrors, Task, Tasks, inputsValue } from "../../types/types";
 
-const EditTaskModal = ({ isShow, setIsShow }) => {
-  const PUT_URL = "http://127.0.0.1:3000/api/v1/tasks/update/task?id=";
-  const initialValue = {
+const EditTaskModal: React.FC<import("../../types/types").showing> = ({ isShow, setIsShow }) => {
+  const PUT_URL: string = "http://127.0.0.1:3000/api/v1/tasks/update/task?id=";
+  const initialValue: inputsValue = {
     title: "",
     assignee: "",
     details: "",
-    date: "",
+    date: new Date(),
     priority: "none",
+    isCompleted: false
   };
   const { currTask, setTasks } = useContext(tasksContext);
   useEffect(() => {
     setInputsValue({
-      title: currTask.title,
-      assignee: currTask.assignee,
-      details: currTask.details,
-      priority: currTask.priority,
-      date: currTask.date,
-      isCompleted: currTask.isCompleted,
+      title: currTask?.title ?? "",
+      assignee: currTask?.assignee ?? "",
+      details: currTask?.details ?? "",
+      priority: currTask?.priority ?? "none",
+      date: currTask?.date?? new Date(),
+      isCompleted: currTask?.isCompleted ?? false,
     });
   }, [currTask]);
 
-  const [inputsValue, setInputsValue] = useState(initialValue);
-  const [inputsErrors, setInputsErrors] = useState({});
+  const [inputsValue, setInputsValue] = useState<inputsValue>(initialValue);
+  // const [inputsErrors, setInputsErrors] = useState<InputsErrors>({});
 
-  const handleChange = ({ target }) => {
-    const { name, value } = target;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): void => {
+    const { name, value } = event.target;
     setInputsValue((prevInputsValue) => ({
       ...prevInputsValue,
       [name]: value,
     }));
-    setInputsErrors(validate({ ...inputsValue, [name]: value }));
+    // setInputsErrors(validate({ ...inputsValue, [name]: value }));
   };
 
-  const validate = (values) => {
-    const errors = {};
+  const validate = (values: inputsValue): InputsErrors => {
+    const errors: InputsErrors = {};
     if (!values.title?.trim()) {
       errors.title = "Title name is required!";
-    } else if (parseInt(values.title.trim()?.at(0))) {
+    } else if (parseInt(values.title.trim()?.charAt(0))) {
       errors.title = "This is not a valid task name!";
     }
 
     if (!values.assignee?.trim()) errors.assignee = "Assignee is required!";
-    else if (parseInt(values.assignee.trim()?.at(0)))
+    else if (parseInt(values.assignee.trim()?.charAt(0)))
       errors.assignee = "This is not a valid Assignee!";
 
     return errors;
   };
 
-  const handleSubmit = async (eve) => {
+  const handleSubmit = async (eve: React.FormEvent): Promise<void> => {
     eve.preventDefault();
     if (Object.keys(validate(inputsValue)).length !== 0) return;
     try {
-      const response = await fetch(PUT_URL + currTask.id, {
+      const response: Response = await fetch(PUT_URL + currTask?.id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -62,10 +64,10 @@ const EditTaskModal = ({ isShow, setIsShow }) => {
       });
       if (response.ok) {
         setIsShow(false);
-        const updatedTask = { ...currTask, ...inputsValue };
-        setTasks((prevTasks) =>
+        const updatedTask = {...currTask, ...inputsValue }; // err in add typing ;;;;;;;;;))))))))))))))
+        setTasks((prevTasks: Tasks) =>
           prevTasks.map((task) =>
-            task.id === currTask.id ? updatedTask : task
+            task.id === currTask?.id ? updatedTask : task
           )
         );
       }
@@ -163,7 +165,7 @@ const EditTaskModal = ({ isShow, setIsShow }) => {
                 <label htmlFor="due-date2">Due Date</label>
                 <input
                   onChange={handleChange}
-                  value={inputsValue.date ?? ""}
+                  value={String(inputsValue.date) ?? ""}
                   name="date"
                   type="date"
                   id="due-date2"

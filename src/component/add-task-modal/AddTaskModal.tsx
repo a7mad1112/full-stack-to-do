@@ -1,23 +1,37 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./add-task-form.css";
-import { tasksContext } from "../../context/tasksContext";
+import { tasksContext } from "../../context/tasksContext.ts";
+import {
+  showing,
+  InputsErrors,
+  MyResponse,
+  inputsValue,
+} from "../../types/types.ts";
 
-const AddTaskForm = ({ isShow, setIsShow }) => {
+const AddTaskForm: React.FC<showing> = ({ isShow, setIsShow }) => {
   const { setTasks } = useContext(tasksContext);
-  const POST_URL = "http://localhost:3000/api/v1/tasks/addtask";
-  const modal = useRef();
-  const form = useRef();
-  const initialValue = {
+  const POST_URL: string = "http://localhost:3000/api/v1/tasks/addtask";
+  const modal = useRef<HTMLDivElement>(null);
+  const form = useRef<HTMLFormElement>(null);
+  const initialValue: inputsValue = {
     title: "",
     assignee: "",
     details: "",
-    date: "",
+    date: new Date(),
     priority: "none",
+    isCompleted: false,
   };
-  const [inputsErrors, setInputsErrors] = useState({});
-  const [inputsValue, setInputsValue] = useState(initialValue);
-  const handleChange = (ev) => {
-    const { name, value } = ev.target;
+
+  const [inputsErrors, setInputsErrors] = useState<InputsErrors>({});
+  const [inputsValue, setInputsValue] = useState<inputsValue>(initialValue);
+  const handleChange = (
+    ev: React.FormEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    // const { name: string, value: string } = ev.target;
+    const name: string = (ev.target as HTMLInputElement)?.name;
+    const value: string = (ev.target as HTMLInputElement)?.value;
     setInputsValue((prevInputsValue) => ({
       ...prevInputsValue,
       [name]: value,
@@ -25,17 +39,16 @@ const AddTaskForm = ({ isShow, setIsShow }) => {
     setInputsErrors(validate({ ...inputsValue, [name]: value }));
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(Object.keys(validate(inputsValue)).length !== 0) return;
-    async function addTask() {
+    if (Object.keys(validate(inputsValue)).length !== 0) return;
+    async function addTask(): Promise<void> {
       // console.log(inputsValue);
-      const task = {
-        title: inputsValue.title,
+      const task: inputsValue = {
+        title: inputsValue.title ?? "",
         assignee: inputsValue.assignee,
         details: inputsValue.details ?? "",
-        date: inputsValue.date ? new Date(inputsValue.date) : null,
+        date: inputsValue.date ? new Date(inputsValue.date) : new Date(),
         priority: inputsValue.priority ?? "none",
         isCompleted: false,
       };
@@ -46,11 +59,13 @@ const AddTaskForm = ({ isShow, setIsShow }) => {
           "Content-Type": "application/json",
         },
       })
-        .then((res) => {
+        .then((res: Response) => {
           if (res.ok) return fetch("http://127.0.0.1:3000/api/v1/tasks");
+          return Promise.reject("Cannot add Task, something went wrong...");
         })
-        .then(res => res.json())
-        .then((data) => setTasks(data.tasks));
+        .then((res: Response) => res.json())
+        .then((data: MyResponse) => setTasks(data.tasks))
+        .catch((err) => console.error(err));
     }
     addTask();
     setIsShow(false);
@@ -59,21 +74,20 @@ const AddTaskForm = ({ isShow, setIsShow }) => {
   useEffect(() => {
     setInputsValue(initialValue);
     setInputsErrors({});
-    form.current.reset();
+    form.current?.reset();
   }, [isShow]);
 
-  const validate = (values) => {
-    const errors = {};
-    if (!values.title.trim()) {
+  const validate = (values: inputsValue) => {
+    const errors: InputsErrors = {};
+    if (!values.title?.trim()) {
       errors.title = "Title name is required!";
-    } else if (parseInt(values.title.trim()?.at(0))) {
+    } else if (parseInt(values.title?.trim().charAt(0))) {
       errors.title = "This is not a valid task name!";
     }
 
     if (!values.assignee.trim()) errors.assignee = "Assignee is required!";
-    else if (parseInt(values.assignee.trim()?.at(0)))
+    else if (parseInt(values.assignee?.trim()?.charAt(0)))
       errors.assignee = "This is not a valid Assignee!";
-
     return errors;
   };
 

@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import './toggle-sidebar.css';
-const ToggleSideBar = () => {
-  const togglerRef = useRef(null);
+const ToggleSideBar: React.FC = () => {
+  const togglerRef = useRef<HTMLDivElement>(null);
   const [isXNav, setIsXNav] = useState(false);
-  const handleClick = () => {
-    togglerRef.current.classList.toggle('menu-clicked');
+  const handleClick = (): void => {
+    togglerRef.current?.classList.toggle('menu-clicked');
     setIsXNav(!isXNav);
-    document.getElementById('side').classList.toggle('show-side');
+    document.getElementById('side')?.classList.toggle('show-side');
   }
   return (
     <div className="menu-icon-container">

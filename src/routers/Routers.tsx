@@ -1,9 +1,9 @@
 
 import { Routes, Route } from "react-router-dom"
-import Home from './../pages/Home/Home';
-import Today from './../pages/Today/Today';
-import Week from './../pages/Week/Week';
-const Routers = () => {
+import Home from '../pages/Home/Home.tsx';
+import Today from '../pages/Today/Today.tsx';
+import Week from '../pages/Week/Week.tsx';
+const Routers: React.FC = () => {
   return (
     <>
       <Routes>

@@ -1,25 +1,26 @@
 import "./delete-task-modal.css";
-import { useContext, useEffect } from "react";
-import { tasksContext } from "../../context/tasksContext";
-const DeleteTaskModal = ({ isShow, setIsShow }) => {
-  const DELETE_URL = "http://127.0.0.1:3000/api/v1/tasks/delete?id=";
+import React, { useContext, useEffect } from "react";
+import { tasksContext } from "../../context/tasksContext.ts";
+import { MyResponse, showing, Task } from "../../types/types.ts";
+const DeleteTaskModal: React.FC<showing> = ({ isShow, setIsShow }) => {
+  const DELETE_URL: string = "http://127.0.0.1:3000/api/v1/tasks/delete?id=";
 
   const { currTask, setTasks } = useContext(tasksContext);
   useEffect(() => {}, [currTask]);
   const handleDelete = () => {
-    fetch(DELETE_URL + currTask.id, {
+    fetch(DELETE_URL + currTask?.id, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     })
-      .then((res) => {
+      .then((res: Response) => {
         if (res.ok) {
           return fetch("http://127.0.0.1:3000/api/v1/tasks");
         }
         throw new Error("Failed to delete task");
       })
-      .then((res) => res.json())
-      .then((data) => setTasks(data.tasks))
-      .catch((err) => {
+      .then((res: Response) => res.json())
+      .then((data: MyResponse) => setTasks(data.tasks))
+      .catch((err: Error) => {
         console.error(err);
       })
       .finally(() => {
@@ -49,7 +50,7 @@ const DeleteTaskModal = ({ isShow, setIsShow }) => {
         <div className="p-3" id="delete-task-form">
           <div className="form-group">
             <p>
-              Are you sure Delete <strong>"{currTask.title}"</strong> Task
+              Are you sure Delete <strong>"{currTask?.title}"</strong> Task
             </p>
           </div>
           <div className="form-group mt-3 d-flex gap-3 justify-content-end">
